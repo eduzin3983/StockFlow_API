@@ -122,17 +122,20 @@ def update_product(id: int, data: dict):
     if "category" in data:
         data["category"] = data["category"].strip().title()
 
-    # Prevent conflicting stock operations
-    if data.get("current_stock") is not None and data.get("add_stock") is not None:
-        raise ValueError("Use only current_stock OR add_stock")
+    if "code" in data:
+        data["code"] = data["code"].strip().title()
+        same_name = repo.select_by_code(data["code"])
+        # If another product with the same name exists, prevent update
+        if same_name and same_name.id != id:
+            raise ValueError("Another product with this name already exists.")
 
     # Delegate update to repository with validated fields
     return repo.update_product(
         id=id,
+        code=data.get("code"),
         name=data.get("name"),
         category=data.get("category"),
         current_stock=data.get("current_stock"),
-        add_stock=data.get("add_stock")
     )
 
 

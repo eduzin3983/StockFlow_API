@@ -6,6 +6,7 @@ and registers all route blueprints.
 """
 
 from flask import Flask
+from flask_cors import CORS
 from flask_migrate import Migrate
 from config import Config
 from app.infraDB.config.connection import db
@@ -22,6 +23,13 @@ def create_app():
     app = Flask(__name__)
     # Load configuration settings from the Config object
     app.config.from_object(Config)
+
+    # Enable CORS for all domains and methods
+    CORS(app, 
+         origins="*",  # Allow all origins
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Allow all common methods
+         allow_headers=["Content-Type", "Authorization"],  # Allow common headers
+         supports_credentials=True)  # Allow credentials if needed
 
     # Initialize SQLAlchemy with the Flask app
     db.init_app(app)

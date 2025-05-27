@@ -50,7 +50,7 @@ class ProductsRepository:
 
         return data_insert
 
-    def update_product(self, id: int, name: str = None, category: str = None, current_stock: int = None, add_stock: int = None):
+    def update_product(self, id: int, name: str = None,code: str = None, category: str = None, current_stock: int = None):
         """
         Update fields of an existing product.
 
@@ -75,10 +75,6 @@ class ProductsRepository:
         if not product:
             return None
 
-        # Prevent conflicting stock operations
-        if current_stock is not None and add_stock is not None:
-            raise ValueError("Use only current_stock OR add_stock")
-
         # Update provided fields
         if name is not None:
             product.name = name
@@ -86,8 +82,8 @@ class ProductsRepository:
             product.category = category
         if current_stock is not None:
             product.current_stock = current_stock
-        if add_stock is not None:
-            product.current_stock += add_stock
+        if code is not None:
+            product.code = code
 
         product.updated_at = datetime.now(timezone.utc)
         db.session.commit()
