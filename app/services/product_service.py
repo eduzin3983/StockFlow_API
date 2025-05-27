@@ -123,7 +123,7 @@ def update_product(id: int, data: dict):
         data["category"] = data["category"].strip().title()
 
     if "code" in data:
-        data["code"] = data["code"].strip().title()
+        data["code"] = data["code"].strip()
         same_name = repo.select_by_code(data["code"])
         # If another product with the same name exists, prevent update
         if same_name and same_name.id != id:
